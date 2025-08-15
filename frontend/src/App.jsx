@@ -56,7 +56,7 @@ function AppContent() {
       return;
     }
 
-    const allMovies = [...trending, ...popular, ...upcoming];
+    const allMovies = [...trending, ...popular, ...upcoming,...myMovies];
     const filtered = allMovies.filter((m, index, self) => {
       const title = (m.title || m.name || "").toLowerCase();
       return (

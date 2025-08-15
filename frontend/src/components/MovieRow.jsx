@@ -42,17 +42,22 @@ export default function MovieRow({ title, movies, icon }) {
                             className="relative min-w-[160px] rounded-lg overflow-hidden flex-shrink-0 hover:cursor-pointer 
                          transform hover:scale-105 hover:shadow-lg transition duration-300 bg-gray-800"
                         >
-                            {m.poster_path ? (
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w300${m.poster_path}`}
-                                    alt={m.title || m.name}
-                                    className="w-50 h-60 object-fill"
-                                />
-                            ) : (
-                                <div className="w-full h-60 bg-gray-700 flex items-center justify-center">
-                                    No Image
-                                </div>
-                            )}
+                            <div className="w-full h-72 overflow-hidden">
+                                {m.poster_path ? (
+                                    <img
+                                        src={m.poster_path?.startsWith("http") || m.poster_path?.startsWith("blob")
+                                            ? m.poster_path
+                                            : `https://image.tmdb.org/t/p/w300${m.poster_path}`}
+                                        alt={m.title || m.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-60 bg-gray-700 flex items-center justify-center">
+                                        No Image
+                                    </div>
+                                )}
+
+                            </div>
 
                             <div
                                 onClick={() => toggleFavorite(m)}
