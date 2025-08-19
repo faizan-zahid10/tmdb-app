@@ -21,7 +21,6 @@ const MyMovies = ({ title, icon }) => {
               key={movie.id}
               className="relative bg-gray-900 p-2 rounded-lg"
             >
-              {/* Delete button here*/}
               <button
                 onClick={() => removeMovie(movie.id)}
                 className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full"

@@ -14,10 +14,9 @@ export default function AddMovieModal({ onClose }) {
       id: Date.now(),
       title,
       release_date: date,
-      poster_path: URL.createObjectURL(posterFile) // preview image
     };
 
-    addMovie(movie);
+    addMovie(movie,posterFile);
     onClose();
   };
 

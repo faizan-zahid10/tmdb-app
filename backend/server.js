@@ -1,6 +1,8 @@
 const express = require('express');
-const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
@@ -62,6 +64,36 @@ app.get('/api/movies/upcoming', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch upcoming movies' });
     }
 });
+
+
+const usersFile = path.join(process.cwd(), "users.json");
+
+// Signup 
+app.post("/api/auth/signup", (req, res) => {
+  const { name, email, phone, password } = req.body;
+  const users = JSON.parse(fs.readFileSync(usersFile));
+
+  if (users.find(u => u.email === email)) {
+    return res.status(400).json({ message: "Email already exists" });
+  }
+
+  users.push({ name, email, phone, password });
+  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+
+  res.json({ message: "Signup successful" });
+});
+
+// Login
+app.post("/api/auth/login", (req, res) => {
+  const { email, password } = req.body;
+  const users = JSON.parse(fs.readFileSync(usersFile));
+
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) return res.status(401).json({ message: "Invalid credentials" });
+
+  res.json({ message: "Login successful", user });
+});
+
 
 
 const PORT = process.env.PORT || 5000;

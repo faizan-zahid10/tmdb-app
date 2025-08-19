@@ -41,10 +41,10 @@ export default function Favorites() {
                 <p className="text-xs text-gray-400">
                   {movie.release_date
                     ? new Date(movie.release_date).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "2-digit",
-                        year: "numeric",
-                      })
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })
                     : "N/A"}
                 </p>
               </div>

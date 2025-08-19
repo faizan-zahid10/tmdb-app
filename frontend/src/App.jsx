@@ -11,6 +11,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MyMovies from "./components/MyMovies";
 import AddMovieModal from "./components/AddMovieModal";
 import { MyMoviesProvider, MyMoviesContext } from "./context/MyMoviesContext";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
@@ -26,6 +29,9 @@ function AppContent() {
   const { myMovies, addMovie } = useContext(MyMoviesContext);
 
   const [isAddMovieOpen, setIsAddMovieOpen] = useState(false);
+
+  const [loggedInUser, setLoggedInUser] = useState(JSON.parse(localStorage.getItem("loggedInUser")));
+
 
   useEffect(() => {
     async function loadData() {
@@ -56,7 +62,7 @@ function AppContent() {
       return;
     }
 
-    const allMovies = [...trending, ...popular, ...upcoming,...myMovies];
+    const allMovies = [...trending, ...popular, ...upcoming, ...myMovies];
     const filtered = allMovies.filter((m, index, self) => {
       const title = (m.title || m.name || "").toLowerCase();
       return (
@@ -70,7 +76,7 @@ function AppContent() {
   };
 
   const handleAddMovie = (movie) => {
-    addMovie(movie); // Now goes through context
+    addMovie(movie); 
     setIsAddMovieOpen(false);
   };
 
@@ -92,13 +98,19 @@ function AppContent() {
             setCurrentPage(page);
           }
         }}
+        loggedInUser={loggedInUser}
+        setLoggedInUser={setLoggedInUser}
       />
 
-      {currentPage !== "favorites" && <SearchBar onSearch={handleSearch} />}
+      {currentPage === "home" && <SearchBar onSearch={handleSearch} />}
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-10">
         {currentPage === "favorites" ? (
           <Favorites />
+        ) : currentPage === "login" ? (
+          <Login setLoggedInUser={setLoggedInUser}  setCurrentPage={setCurrentPage} />
+        ) : currentPage === "signup" ? (
+          <SignUp setCurrentPage={setCurrentPage} />
         ) : isSearching ? (
           searchResults.length > 0 ? (
             <MovieRow title="Search Results" movies={searchResults} />
@@ -151,6 +163,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<AppContent />} />
             <Route path="/favorites" element={<Favorites />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </Router>
       </MyMoviesProvider>
